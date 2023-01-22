@@ -9,6 +9,13 @@ jobs:
     runs-on: ubuntu-latest
     name: A job to say hello
     steps:
+
+      - name: Login via Az module
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          enable-AzPSSession: false
+              
       - name: Get the secrets
         uses: AsierSalguero/KVLoader@v8
         with:
