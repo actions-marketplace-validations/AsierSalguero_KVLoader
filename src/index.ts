@@ -6,7 +6,6 @@ const KEY_VAULT_URI_NAME = core.getInput('KEY_VAULT_URI_NAME') || process.env.KE
 const SHOW_ENV_VARIABLES = core.getInput('SHOW_ENV_VARIABLES') || process.env.SHOW_ENV_VARIABLES;
 
 const credential = new DefaultAzureCredential();
-const KVNAME  = getKeyVaultUriName(KEY_VAULT_URI_NAME);
 const KVURI = getKeyVaultUriName(KEY_VAULT_URI_NAME);
 const client = new SecretClient(KVURI, credential);
 
@@ -66,8 +65,7 @@ async function asiewr(): Promise<envResult[]> {
 
 function getKeyVaultUriName(uri: string){
 
-    if(uri.indexOf('.vault.azure.net/') >= 0) return uri.toUpperCase();
-    else return 'https://'+uri+'.vault.azure.net/';
+    return 'https://'+uri+'.vault.azure.net/';
 }
 
 asiewr().then((dmsg) => {
@@ -75,7 +73,7 @@ asiewr().then((dmsg) => {
     if(SHOW_ENV_VARIABLES) console.log(process.env);
     else{
         console.log("##########################################################")
-        console.log(" Listado de secretros en el KV: " + KVNAME)
+        console.log(" Listado de secretros en el KV: " + KEY_VAULT_URI_NAME)
         console.log("##########################################################")
         console.log('')    
 
