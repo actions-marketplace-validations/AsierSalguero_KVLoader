@@ -11,27 +11,18 @@ const environment = [ 'STAGE', 'TEST', 'PROD' ];
 const typeVariant = [ 'frontend', 'backend', 'both' ];
 
 
-const preparation = async (proposedEnvironment: string, proposedType: string ) => {
+const preparation = async () => {
 
   //Check proposed Environment [ TEST / STAGE / PROD ]
 
-  if (!environment.includes(proposedEnvironment)) {
-    throw new Error("Environment parameter set incorrectly, choose one of [TEST | STAGE | PROD].");
-  }
-  if (!typeVariant.includes(proposedType)) {
-    throw new Error("Type parameter set incorrectly, choose one of [frontend | backend.");
-  }
-  const prefix: string = proposedEnvironment; 
-  const type: string = proposedType;
   let arrJson: {}[] = [];
   let tfvars_frontend: string[] = [];
   let tfvars_backend: string[] = [];
 
-  const azureParameters = await manager.listAll(prefix, type); 
+  const azureParameters = await manager.listAll(); 
 
-  console.log(`Setting ENV params for environment: ${prefix} and type: ${type}:`);
   azureParameters.map( secretObject => {
-    if (secretObject.enabled && secretObject.environment === prefix && secretObject.tags.type === type) {
+    if (secretObject.enabled) {
 
       const obj:{} = {};
       
@@ -42,43 +33,16 @@ const preparation = async (proposedEnvironment: string, proposedType: string ) =
       obj['value'] = secretObject.value;
       obj['slotSetting'] = false;
 
+      process.env[secretObject.name] = secretObject.value
+
       arrJson.push(obj);
       
     }
   })
 
-  const terraformParameters = await manager.listAll(prefix);
-
-  terraformParameters.map( secretObject => {
-    if (secretObject.enabled && secretObject.environment === prefix && secretObject.tags.type !== undefined) {
-      
-      //core.setSecret(secretObject.value);
-      secretObject.value = (secretObject.value).replace(/\\/g, "\\\\");
-
-      if (secretObject.tags.type === 'frontend') tfvars_frontend.push(` "${secretObject.name}":"${secretObject.value}" `);
-      if (secretObject.tags.type === 'backend') tfvars_backend.push(` "${secretObject.name}":"${secretObject.value}" `);
-
-    }
-
-  })
-
   core.setOutput("json", JSON.stringify(arrJson, null));
-  core.setOutput("terraform", prepareTfVars(tfvars_frontend,tfvars_backend));
 
 };
 
-const prepareTfVars = (frontend: string[], backend: string[]) => {
-  
-  let return_object = `{ "web_app_settings": {\
-    `;
-  return_object = return_object.concat(` "frontend": { ${frontend} }, `);
-  return_object = return_object.concat(` "backend": { ${backend} } } }`);
-  return return_object;
-}
-
-
-const e  = core.getInput('ENVIRONMENT') || process.env.ENVIRONMENT;
-const t  = core.getInput('TYPE') || process.env.TYPE;
-
-preparation(e,t)
+preparation()
 .catch( err => console.error('> ERROR in parameters: ', err ));
