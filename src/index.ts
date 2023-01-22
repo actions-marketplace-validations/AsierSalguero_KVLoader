@@ -2,14 +2,13 @@ import * as core from '@actions/core';
 import { DefaultAzureCredential } from '@azure/identity';
 import { SecretClient } from '@azure/keyvault-secrets';
 
-const KEY_VAULT_URI = core.getInput('KEY_VAULT_URI') || process.env.KEY_VAULT_URI;
+const KEY_VAULT_URI_NAME = core.getInput('KEY_VAULT_URI_NAME') || process.env.KEY_VAULT_URI_NAME;
 const SHOW_ENV_VARIABLES = core.getInput('SHOW_ENV_VARIABLES') || process.env.SHOW_ENV_VARIABLES;
 
 const credential = new DefaultAzureCredential();
-const client = new SecretClient(KEY_VAULT_URI, credential);
-
-const KVNAME  = getKeyVaultName(KEY_VAULT_URI);
-
+const KVNAME  = getKeyVaultUriName(KEY_VAULT_URI_NAME);
+const KVURI = getKeyVaultUriName(KEY_VAULT_URI_NAME);
+const client = new SecretClient(KVURI, credential);
 
 interface envResult {
     
@@ -31,18 +30,14 @@ async function asiewr(): Promise<envResult[]> {
 
     let arrSecrets = []
 
-
     return new Promise( async (resolve, reject) => {
 
         try {
             
             for await (let secretProperties of client.listPropertiesOfSecrets()) {
-    
 
               let prefix = ""
               const azureSecret = await client.getSecret(secretProperties.name);
-              
-              
 
               if (!azureSecret.properties.expiresOn){
                 let fecha = new Date();
@@ -65,17 +60,17 @@ async function asiewr(): Promise<envResult[]> {
             reject('Error: ' + err);
 
         }
-        //console.log(process.env)
     });
 }
 
 
-function getKeyVaultName(uri: string){
-    let nombre = uri.replace('https://','').replace('.vault.azure.net','').toUpperCase();
-    return nombre;
+function getKeyVaultUriName(uri: string){
+    if(uri.endsWith(".vault.azure.net/")) return uri.toUpperCase();
+    else return 'https://'+uri+'.vault.azure.net/';
 }
 
 asiewr().then((dmsg) => {
+
     if(SHOW_ENV_VARIABLES) console.log(process.env);
     else{
         console.log("##########################################################")
