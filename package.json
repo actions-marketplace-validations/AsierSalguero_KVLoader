@@ -1,5 +1,5 @@
 {
-  "name": "enhanced-env-azure-vault-action",
+  "name": "kvloader",
   "version": "1.1.4",
   "description": "This action gets secrets from Azure Vault as ENV parameters for specific environment and type.",
   "main": "index.js",
@@ -11,15 +11,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/PavelStancik/enhanced-env-azure-vault-action.git"
+    "url": "git+https://github.com/AsierSalguero/KVLoader.git"
   },
   "keywords": [],
   "author": "Pavel Stancik",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/actions/enhanced-env-azure-vault-action/issues"
+    "url": "https://github.com/actions/KVLoader/issues"
   },
-  "homepage": "https://github.com/actions/enhanced-env-azure-vault-action#readme",
+  "homepage": "https://github.com/actions/KVLoader#readme",
   "dependencies": {
     "@actions/core": "^1.5.0",
     "enhanced-env-azure-vault": "^1.2.4"

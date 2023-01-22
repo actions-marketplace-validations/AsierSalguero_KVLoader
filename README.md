@@ -43,7 +43,7 @@ This could be used by `hashicorp/setup-terraform@v1.2.1` action.
       enable-AzPSSession: false
 
 - name: Get the secrets
-  uses: PavelStancik/enhanced-env-azure-vault-action@v1.0.10
+  uses: PavelStancik/KVLoader@v1.0.10
   with:
     KEY_VAULT_URI: ${{ secrets.KEY_VAULT_URI }}
     ENVIRONMENT: TEST
