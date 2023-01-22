@@ -1,8 +1,6 @@
-# Enhanced ENV Azure Vault Action
+# Azure KV Secrets Loader
+Lee los secretos de un keyvault y los añade a las variables de entorno, ademas indica si el secreto esta caducado
 
-This action gets secrets from Azure Vault as ENV parameters for specific environment and type.
-It depends on Enhanced ENV Azure Vault NPM package, which prepares data for Azure Key Vault based on environment [staging / testing / production] and type [ Backend / Frontend / ..].
-See https://www.npmjs.com/package/enhanced-env-azure-vault
 ## Inputs
 
 ### `KEY_VAULT_URI`
@@ -24,7 +22,7 @@ Environment parameters, you can see them in your Action job as `${{ env.xxxx }}`
 
 ```yaml
 - name: Login via Az module
-  uses: azure/login@v1
+  uses: azure/login@v1.0.0
     with:
       creds: ${{ secrets.AZ_LOGIN_CREDENTIALS }}
       enable-AzPSSession: false
