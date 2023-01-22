@@ -11,7 +11,7 @@ jobs:
     steps:
       - name: Hello world action step
         id: hello
-        uses: AsierSalguero/KVLoader@v1
+        uses: AsierSalguero/KVLoader@v2
         with:
           who: 'Mona the Octocat'
       # Use the output from the `hello` step
