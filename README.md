@@ -28,7 +28,7 @@ Environment parameters, you can see them in your Action job as `${{ env.xxxx }}`
       enable-AzPSSession: false
 
 - name: Get the secrets
-  uses: AsierSalguero/KVLoader@v1
+  uses: AsierSalguero/KVLoader@v1.0.0
   with:
     KEY_VAULT_URI: ${{ secrets.KEY_VAULT_URI }}
     SHOW_ENV_VARIABLES: False
