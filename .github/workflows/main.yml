@@ -10,7 +10,7 @@ jobs:
     name: A job to say hello
     steps:
       - name: Get the secrets
-        uses: AsierSalguero/KVLoader@v5
+        uses: AsierSalguero/KVLoader@v6
         with:
           KEY_VAULT_URI: 
         id: aenv
