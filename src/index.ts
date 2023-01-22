@@ -65,7 +65,8 @@ async function asiewr(): Promise<envResult[]> {
 
 
 function getKeyVaultUriName(uri: string){
-    if(uri.endsWith(".vault.azure.net/")) return uri.toUpperCase();
+
+    if(uri.indexOf('.vault.azure.net/') >= 0) return uri.toUpperCase();
     else return 'https://'+uri+'.vault.azure.net/';
 }
 
