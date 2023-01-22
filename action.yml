@@ -1,11 +1,11 @@
-name: 'Enhanced ENV Azure key vault - Get Secrets'
-description: 'Get Secrets from Azure Key Vault instance and set as ENV variables.'
+name: 'Azure KV Secrets Loader'
+description: 'Lee los secretos de un keyvault y los añade a las variables de entorno, ademas indica si el secreto esta caducado'
 inputs:
   KEY_VAULT_URI:
     description: 'Nombre o la url del keyvault'
     required: true
   SHOW_ENV_VARIABLES:
-    description: 'Mostrar los secretos junto con loas variables de entorno o solo los secretos'
+    description: 'true | false, Mostrar los secretos junto con loas variables de entorno o solo los secretos'
     required: true
 outputs:
   env:
@@ -14,5 +14,5 @@ branding:
   icon: 'download-cloud'
   color: 'blue'
 runs:
-  using: 'node12'
+  using: 'node16'
   main: 'lib/index.js'
