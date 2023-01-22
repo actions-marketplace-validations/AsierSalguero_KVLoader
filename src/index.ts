@@ -1,46 +1,67 @@
 import * as core from '@actions/core';
+import { DefaultAzureCredential } from '@azure/identity';
+import { SecretClient } from '@azure/keyvault-secrets';
 
 const KEY_VAULT_URI = core.getInput('KEY_VAULT_URI') || process.env.KEY_VAULT_URI;
-process.env['KEY_VAULT_URI'] = KEY_VAULT_URI;
-
-import * as manager from "enhanced-env-azure-vault";
-
-const underscoreReplacedBy = "0x";
-
-const environment = [ 'STAGE', 'TEST', 'PROD' ];
-const typeVariant = [ 'frontend', 'backend', 'both' ];
+const credential = new DefaultAzureCredential();
+const client = new SecretClient(KEY_VAULT_URI, credential);
 
 
-const preparation = async () => {
+interface envResult {
+    
+    expiresOn: string,
+    createdOn: Date,
+    updatedOn: Date,
+    id: string,
+    tags: { environment: string, type: string },
+    vaultUrl: string,
+    name: string,
+    version: number,
+    enabled: boolean,
+    recoverableDays: number,
+    recoveryLevel: string,
+    value: string,
+    environment: string
+}
+async function asiewr(): Promise<envResult[]> {
 
-  //Check proposed Environment [ TEST / STAGE / PROD ]
+    let arrSecrets = [];
 
-  let arrJson: {}[] = [];
-  let tfvars_frontend: string[] = [];
-  let tfvars_backend: string[] = [];
 
-  const azureParameters = await manager.listAllfull(); 
+    return new Promise( async (resolve, reject) => {
 
-  azureParameters.map( secretObject => {
+        try {
+            
+            for await (let secretProperties of client.listPropertiesOfSecrets()) {
+    
 
-      const obj:{} = {};
-      
-      core.exportVariable(secretObject.name, secretObject.value);
-      core.setSecret(secretObject.value);
+              let prefix = " "
+              const azureSecret = await client.getSecret(secretProperties.name);
+              
+              let fecha = new Date();
 
-      obj['name'] = secretObject.name;
-      obj['value'] = secretObject.value;
-      obj['slotSetting'] = false;
+              if (azureSecret.properties.expiresOn.getDate() < fecha.getDate()){
+                prefix = "caducado"
+              }
+                
+              secretProperties['name'] = azureSecret.name
+              secretProperties['value'] = azureSecret.value;
+              arrSecrets.push(secretProperties)
 
-      process.env[secretObject.name] = secretObject.value
+              process.env[''+azureSecret.name] = '***'
+              console.log('Secreto ' + azureSecret.name)
 
-      arrJson.push(obj);
-      
-  })
+            }
+    
+            resolve(arrSecrets);
 
-  core.setOutput("json", JSON.stringify(arrJson, null));
+        } catch (err: any) {
 
-};
+            console.log('Error: ', err);
+            reject('Error: ' + err);
 
-preparation()
-.catch( err => console.error('> ERROR in parameters: ', err ));
+        }
+        //console.log(process.env)
+    });
+}
+asiewr().then(()=>{ console.log(process.env)});
