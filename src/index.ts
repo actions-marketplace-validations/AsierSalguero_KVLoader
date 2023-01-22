@@ -19,7 +19,7 @@ const preparation = async () => {
   let tfvars_frontend: string[] = [];
   let tfvars_backend: string[] = [];
 
-  const azureParameters = await manager.listAll(); 
+  const azureParameters = await manager.listAllfull(); 
 
   azureParameters.map( secretObject => {
     if (secretObject.enabled) {

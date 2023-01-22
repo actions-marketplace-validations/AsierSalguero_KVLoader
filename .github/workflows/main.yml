@@ -9,11 +9,8 @@ jobs:
     runs-on: ubuntu-latest
     name: A job to say hello
     steps:
-      - name: Hello world action step
-        id: hello
-        uses: AsierSalguero/KVLoader@v3
+      - name: Get the secrets
+        uses: AsierSalguero/KVLoader@v4
         with:
-          who: 'Mona the Octocat'
-      # Use the output from the `hello` step
-      - name: Get the output time
-        run: echo "The time was ${{ steps.hello.outputs.time }}"
+          KEY_VAULT_URI: ${{ secrets.KEY_VAULT_URI }}
+        id: aenv
