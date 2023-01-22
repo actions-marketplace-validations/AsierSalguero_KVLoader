@@ -40,7 +40,7 @@ async function asiewr(): Promise<envResult[]> {
               
               let fecha = new Date();
 
-              if (azureSecret.properties.expiresOn.getDate() < fecha.getDate()){
+              if (azureSecret.properties.expiresOn !== null && azureSecret.properties.expiresOn.getDate() < fecha.getDate()){
                 prefix = "caducado"
               }
                 
