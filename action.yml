@@ -1,16 +1,25 @@
-# action.yml
-name: 'Hello World'
-description: 'Greet someone and record the time'
+name: 'Enhanced ENV Azure key vault - Get Secrets'
+description: 'Get Secrets from Azure Key Vault instance and set as ENV variables.'
 inputs:
-  who:  # id of inputsadfasdfasdfasdf
-    description: 'Who to greet'
+  KEY_VAULT_URI:
+    description: 'Name of the azure key vault'
     required: true
-    default: 'World'
+  ENVIRONMENT:
+    description: 'Environment name, e.g.: [PROD | STAGE | TEST]'
+    required: true
+  TYPE:
+    description: 'Type of parameter, e.g.: [frontend | backend]'
+    required: true
 outputs:
-  time: # id of output
-    description: 'The time we greeted you'
+  env:
+    description: 'The environment parameters'
+  json:
+    description: 'The environment parameters in json for AppService config'
+  terraform:
+    description: 'The environment parameters as terraform secrets in JSON format'
+branding:
+  icon: 'download-cloud'
+  color: 'blue'
 runs:
-  using: 'docker'
-  image: 'Dockerfile'
-  args:
-    - ${{ inputs.who-to-greet }}
+  using: 'node12'
+  main: 'lib/index.js'
