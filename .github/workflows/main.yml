@@ -10,7 +10,7 @@ jobs:
     name: A job to say hello
     steps:
       - name: Get the secrets
-        uses: AsierSalguero/KVLoader@v6
+        uses: AsierSalguero/KVLoader@v7
         with:
-          KEY_VAULT_URI: 
+          KEY_VAULT_URI: "https://developeraaaaaaaaaaaaa.vault.azure.net/"
         id: aenv

@@ -22,7 +22,6 @@ const preparation = async () => {
   const azureParameters = await manager.listAllfull(); 
 
   azureParameters.map( secretObject => {
-    if (secretObject.enabled) {
 
       const obj:{} = {};
       
@@ -37,7 +36,6 @@ const preparation = async () => {
 
       arrJson.push(obj);
       
-    }
   })
 
   core.setOutput("json", JSON.stringify(arrJson, null));
