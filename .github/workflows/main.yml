@@ -17,7 +17,7 @@ jobs:
           enable-AzPSSession: false
               
       - name: Get the secrets
-        uses: AsierSalguero/KVLoader@v10
+        uses: AsierSalguero/KVLoader@v1
         with:
           KEY_VAULT_URI: "https://developeraaaaaaaaaaaaa.vault.azure.net/"
         id: aenv

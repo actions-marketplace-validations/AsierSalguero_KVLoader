@@ -35,20 +35,22 @@ async function asiewr(): Promise<envResult[]> {
             for await (let secretProperties of client.listPropertiesOfSecrets()) {
     
 
-              let prefix = " "
+              let prefix = ""
               const azureSecret = await client.getSecret(secretProperties.name);
               
-              let fecha = new Date();
+              
 
-              if (azureSecret.properties.expiresOn !== null && azureSecret.properties.expiresOn.getDate() < fecha.getDate()){
-                prefix = "caducado"
+              if (!azureSecret.properties.expiresOn){
+                let fecha = new Date();
+                let secreetofecha = azureSecret.properties.expiresOn
+                if(secreetofecha < fecha ) prefix = "caducado"
               }
                 
               secretProperties['name'] = azureSecret.name
               secretProperties['value'] = azureSecret.value;
               arrSecrets.push(secretProperties)
 
-              process.env[''+azureSecret.name] = '***'
+              process.env[''+azureSecret.name] = prefix
               console.log('Secreto ' + azureSecret.name)
 
             }
