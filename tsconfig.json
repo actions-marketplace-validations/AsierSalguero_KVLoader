@@ -8,5 +8,8 @@
       "outDir": "./lib",                        /* Redirect output structure to the directory. */
       "rootDir": "./src",
     },
-    "lib": ["es2015"]
+    "lib": [
+      "es2018",
+      "DOM"
+    ]
   }
